@@ -46,12 +46,34 @@ str(gi_data$ed_count_vomd)
 gi_data = rename(gi_data,"zip"="ZIP")
 # look at the distribution of gi_data
 table(gi_data$zip, useNA = "always")
-# looks like there are some zip codes that are not 5 digits and will need to be clenaed up
-# for now, excluding these zip codes, but will need to decide how to clean these later on
-# create a new variable that excludes zip codes that are <5 digits
-zip_clean = ifelse(nchar(gi_data$zip)==5,gi_data$zip,NA)
-gi_data$zip_clean = zip_clean
-gi_data$zip_clean = as.numeric(gi_data$zip_clean)
+# looks like there are some zip codes that are not 5 digits and will need to be cleaned up
+
+# create a function that loops through each zip code and if it's <5 digits, adds leading 0s
+table(nchar(gi_data$zip))
+str(gi_data$zip)
+# first remove the missing zip codes
+length(which(is.na(gi_data$zip))) # 24 missing
+gi_data = gi_data[-which(is.na(gi_data$zip)),]
+# then do a for loop to add leading 0s
+zip_new = rep(NA,nrow(gi_data))
+for (i in 1:nrow(gi_data)){
+  if (gi_data$zip[i]=="NULL"){
+    zip_new[i] = NA
+  } else if (nchar(gi_data$zip[i])==4 & gi_data$zip[i] != "NULL"){
+    zip_new[i] = as.character(paste0("0",gi_data$zip[i]))
+  } else if (nchar(gi_data$zip[i])==3){
+    zip_new[i] = as.character(paste0("00",gi_data$zip[i]))
+  } else if (nchar(gi_data$zip[i])==2){
+    zip_new[i] = as.character(paste0("000",gi_data$zip[i]))
+  } else {
+    zip_new[i] = as.character(gi_data$zip[i])
+  }
+}
+# check the output
+head(zip_new)
+table(nchar(zip_new))
+gi_data$zip_clean = zip_new
+
 # look at a summary of the cleaned zip data
 summary(gi_data$zip_clean)
 table(gi_data$zip_clean)
@@ -61,9 +83,9 @@ max(gi_data$zip_clean)
 gi_data$zip_clean[which(gi_data$zip_clean==99999)] = NA
 
 # remove the rows that have missing zip code data because we will not be able to map these
-length(which(is.na(gi_data$zip_clean))) # 1061 missing 
-gi_data_clean = gi_data[which(!(is.na(gi_data$zip_clean))),] # 185843-1061=184782
-nrow(gi_data_clean) # 184782
+length(which(is.na(gi_data$zip_clean))) # 423 missing 
+gi_data_clean = gi_data[which(!(is.na(gi_data$zip_clean))),] # 185819-423=185396
+nrow(gi_data_clean) # 185396
 
 # export the cleaned case file
 write_csv(gi_data_clean,"gi_data_case_file.csv")

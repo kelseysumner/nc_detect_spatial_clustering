@@ -32,17 +32,6 @@ setwd("/Users/kelseysumner/Desktop/NC DETECT")
 # read in the raw gi data
 gi_raw_clean_data = read_csv("GI visit data/gi_data_case_file.csv")
 
-# read in the gi data merged with the zip code centroids
-gi_merged_data = read.dbf("Shapefiles/zip_nc_with_gi_data/zip_nc_with_gi_data.dbf")
-
-
-#### ----- check the merged data --------- ####
-
-# look at the unique zip codes
-length(unique(gi_merged_data$ZIP)) # 1030  - so these are all unique
-
-# we will want to look at the data set a couple different ways so end up changing the gi_raw_clean data and redoing the merge
-
 
 #### ------- manipulate the cleaned data to have various data set aggregations ------- ####
 
@@ -55,7 +44,7 @@ summary(gi_raw_clean_data)
 # make the zip_clean column a character
 gi_raw_clean_data$zip_clean = as.character(gi_raw_clean_data$zip_clean)
 # looks good, now export
-# write_csv(gi_raw_clean_data,"gi_case_data_by_day.csv")
+write_csv(gi_raw_clean_data,"gi_case_data_by_day.csv")
 
 ## now make a new dataset that is aggregated by the month level
 # make a month variable
