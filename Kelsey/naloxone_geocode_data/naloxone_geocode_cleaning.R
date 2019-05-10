@@ -91,6 +91,20 @@ tail(nalox_data$arc_zip_co,20)
 nalox_data$arc_zip_co = new_zip
 
 # unitnotf_1
+str(nalox_data$unitnotf_1)
+table(nalox_data$unitnotf_1)
+# looks like the data is all of 2017 (January 1 - December 31)
+# data in correct date format
+
+# week
+str(nalox_data$week)
+summary(nalox_data$week)
+# looks coded correctly
+
+# 
+
+
+
 
 
 
