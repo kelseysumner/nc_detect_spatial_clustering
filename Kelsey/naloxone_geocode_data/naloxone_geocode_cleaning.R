@@ -23,10 +23,10 @@ library(foreign)
 #### -------- load in the data sets -------- ####
 
 # set working directory
-setwd("/Users/kelseysumner/Desktop/NC DETECT")
+setwd("C://Users//kelseyms//OneDrive - University of North Carolina at Chapel Hill")
 
 # read in a data set
-nalox_data = read_csv("Naloxone Geocoded Data/naloxone_geocoded_deidentified_tract.csv")
+nalox_data = read_csv("nc_detect_one_drive/Naloxone Geocoded Data/naloxone_geocoded_deidentified_tract.csv")
 
 
 #### ----- clean the data set ---------- ####
