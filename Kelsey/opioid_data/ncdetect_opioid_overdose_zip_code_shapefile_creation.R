@@ -49,17 +49,28 @@ clean_data %>%
 clean_data_nsp = clean_data
 
 # convert to a spatial points data frame
+
+  create_shapefile <- function(data, layerstring) {
+    coordinates(data) <- c("longitude","latitude") # this pulls out lat/long
+    proj4string(data) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+    writeOGR(data,dsn=".",layer=layerstring,driver="ESRI Shapefile")
+  }
+
+
 class(clean_data)
 head(clean_data)
 colnames(clean_data)
-coordinates(clean_data) <- c("longitude","latitude") # this pulls out lat/long
+  # coordinates(clean_data) <- c("longitude","latitude") # this pulls out lat/long
 class(clean_data)
 
 # now export the spatial points data frame as a shapefile
 # add proj4 string
-proj4string(clean_data) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(clean_data,dsn=".",layer="opioid_overdose",driver="ESRI Shapefile")
+create_shapefile(clean_data, "opioid_overdose")
+  # proj4string(clean_data) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+  # writeOGR(clean_data,dsn=".",layer="opioid_overdose",driver="ESRI Shapefile")
 # this created a shapefile of all the data
+
+
 
 # now subset the data to look at the data aggregated by months
 month_data = clean_data_nsp %>%
@@ -90,74 +101,95 @@ data_5_19 = month_data[which(month_data$month_year=="5-2019"),]
 table(month_data$month_year, useNA = "always")
 
 # now create separate separate shapefiles for each month
-# data_1_18
-coordinates(data_1_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_1_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_1_18,dsn=".",layer="opioid_overdose_data_1_18",driver="ESRI Shapefile")
-# data_2_18
-coordinates(data_2_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_2_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_2_18,dsn=".",layer="opioid_overdose_data_2_18",driver="ESRI Shapefile")
-# data_3_18
-coordinates(data_3_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_3_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_3_18,dsn=".",layer="opioid_overdose_data_3_18",driver="ESRI Shapefile")
-# data_4_18
-coordinates(data_4_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_4_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_4_18,dsn=".",layer="opioid_overdose_data_4_18",driver="ESRI Shapefile")
-# data_5_18
-coordinates(data_5_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_5_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_5_18,dsn=".",layer="opioid_overdose_data_5_18",driver="ESRI Shapefile")
-# data_6_18
-coordinates(data_6_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_6_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_6_18,dsn=".",layer="opioid_overdose_data_6_18",driver="ESRI Shapefile")
-# data_7_18
-coordinates(data_7_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_7_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_7_18,dsn=".",layer="opioid_overdose_data_7_18",driver="ESRI Shapefile")
-# data_8_18
-coordinates(data_8_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_8_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_8_18,dsn=".",layer="opioid_overdose_data_8_18",driver="ESRI Shapefile")
-# data_9_18
-coordinates(data_9_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_9_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_9_18,dsn=".",layer="opioid_overdose_data_9_18",driver="ESRI Shapefile")
-# data_10_18
-coordinates(data_10_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_10_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_10_18,dsn=".",layer="opioid_overdose_data_10_18",driver="ESRI Shapefile")
-# data_11_18
-coordinates(data_11_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_11_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_11_18,dsn=".",layer="opioid_overdose_data_11_18",driver="ESRI Shapefile")
-# data_12_18
-coordinates(data_12_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_12_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_12_18,dsn=".",layer="opioid_overdose_data_12_18",driver="ESRI Shapefile")
-# data_1_19
-coordinates(data_1_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_1_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_1_19,dsn=".",layer="opioid_overdose_data_1_19",driver="ESRI Shapefile")
-# data_2_19
-coordinates(data_2_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_2_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_2_19,dsn=".",layer="opioid_overdose_data_2_19",driver="ESRI Shapefile")
-# data_3_19
-coordinates(data_3_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_3_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_3_19,dsn=".",layer="opioid_overdose_data_3_19",driver="ESRI Shapefile")
-# data_4_19
-coordinates(data_4_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_4_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_4_19,dsn=".",layer="opioid_overdose_data_4_19",driver="ESRI Shapefile")
-# data_5_19
-coordinates(data_5_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_5_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_5_19,dsn=".",layer="opioid_overdose_data_5_19",driver="ESRI Shapefile")
+
+
+create_shapefile(data_1_18, "opioid_overdose_data_1_18")
+create_shapefile(data_2_18_, "opioid_overdose_data_2_18")
+create_shapefile(data_3_18, "opioid_overdose_data_3_18")
+create_shapefile(data_4_18, "opioid_overdose_data_4_18")
+create_shapefile(data_5_18, "opioid_overdose_data_5_18")
+create_shapefile(data_6_18, "opioid_overdose_data_6_18")
+create_shapefile(data_7_18, "opioid_overdose_data_7_18")
+create_shapefile(data_8_18, "opioid_overdose_data_8_18")
+create_shapefile(data_9_18, "opioid_overdose_data_9_18")
+create_shapefile(data_10_18, "opioid_overdose_data_10_18")
+create_shapefile(data_11_18, "opioid_overdose_data_11_18")
+create_shapefile(data_12_18, "opioid_overdose_data_12_18")
+create_shapefile(data_1_19, "opioid_overdose_data_1_19")
+create_shapefile(data_2_19, "opioid_overdose_data_2_19")
+create_shapefile(data_3_19, "opioid_overdose_data_3_19")
+create_shapefile(data_4_19, "opioid_overdose_data_4_19")
+create_shapefile(data_5_19, "opioid_overdose_data_5_19")
+
+
+# # data_1_18
+# coordinates(data_1_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_1_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_1_18,dsn=".",layer="opioid_overdose_data_1_18",driver="ESRI Shapefile")
+# # data_2_18
+# coordinates(data_2_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_2_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_2_18,dsn=".",layer="opioid_overdose_data_2_18",driver="ESRI Shapefile")
+# # data_3_18
+# coordinates(data_3_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_3_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_3_18,dsn=".",layer="opioid_overdose_data_3_18",driver="ESRI Shapefile")
+# # data_4_18
+# coordinates(data_4_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_4_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_4_18,dsn=".",layer="opioid_overdose_data_4_18",driver="ESRI Shapefile")
+# # data_5_18
+# coordinates(data_5_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_5_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_5_18,dsn=".",layer="opioid_overdose_data_5_18",driver="ESRI Shapefile")
+# # data_6_18
+# coordinates(data_6_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_6_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_6_18,dsn=".",layer="opioid_overdose_data_6_18",driver="ESRI Shapefile")
+# # data_7_18
+# coordinates(data_7_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_7_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_7_18,dsn=".",layer="opioid_overdose_data_7_18",driver="ESRI Shapefile")
+# # data_8_18
+# coordinates(data_8_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_8_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_8_18,dsn=".",layer="opioid_overdose_data_8_18",driver="ESRI Shapefile")
+# # data_9_18
+# coordinates(data_9_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_9_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_9_18,dsn=".",layer="opioid_overdose_data_9_18",driver="ESRI Shapefile")
+# # data_10_18
+# coordinates(data_10_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_10_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_10_18,dsn=".",layer="opioid_overdose_data_10_18",driver="ESRI Shapefile")
+# # data_11_18
+# coordinates(data_11_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_11_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_11_18,dsn=".",layer="opioid_overdose_data_11_18",driver="ESRI Shapefile")
+# # data_12_18
+# coordinates(data_12_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_12_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_12_18,dsn=".",layer="opioid_overdose_data_12_18",driver="ESRI Shapefile")
+# # data_1_19
+# coordinates(data_1_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_1_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_1_19,dsn=".",layer="opioid_overdose_data_1_19",driver="ESRI Shapefile")
+# # data_2_19
+# coordinates(data_2_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_2_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_2_19,dsn=".",layer="opioid_overdose_data_2_19",driver="ESRI Shapefile")
+# # data_3_19
+# coordinates(data_3_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_3_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_3_19,dsn=".",layer="opioid_overdose_data_3_19",driver="ESRI Shapefile")
+# # data_4_19
+# coordinates(data_4_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_4_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_4_19,dsn=".",layer="opioid_overdose_data_4_19",driver="ESRI Shapefile")
+# # data_5_19
+# coordinates(data_5_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_5_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_5_19,dsn=".",layer="opioid_overdose_data_5_19",driver="ESRI Shapefile")
 
 # now aggregate by year
 year_data = clean_data_nsp %>%
@@ -172,15 +204,17 @@ year_data_2019 = year_data[which(year_data$year=="2019"),]
 table(year_data$year, useNA = "always")
 
 # now make separate shape files for each year
-# 2018
-coordinates(year_data_2018) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(year_data_2018) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(year_data_2018,dsn=".",layer="opioid_overdose_year_data_2018",driver="ESRI Shapefile")
-# 2019
-coordinates(year_data_2019) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(year_data_2019) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(year_data_2019,dsn=".",layer="opioid_overdose_year_data_2019",driver="ESRI Shapefile")
+create_shapefile(year_data_2018, "opioid_overdose_year_data_2018")
+create_shapefile(year_data_2019, "opioid_overdose_year_data_2019")
 
+# # 2018
+# coordinates(year_data_2018) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(year_data_2018) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(year_data_2018,dsn=".",layer="opioid_overdose_year_data_2018",driver="ESRI Shapefile")
+# # 2019
+# coordinates(year_data_2019) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(year_data_2019) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(year_data_2019,dsn=".",layer="opioid_overdose_year_data_2019",driver="ESRI Shapefile")
 
 
 #### ---------- now work with just NC and bordering states (SC, GA, TN, VA) ----------- ####
@@ -200,14 +234,15 @@ nc_contig_data_nsp = nc_contig_data
 class(nc_contig_data)
 head(nc_contig_data)
 colnames(nc_contig_data)
-coordinates(nc_contig_data) <- c("longitude","latitude") # this pulls out lat/long
+# coordinates(nc_contig_data) <- c("longitude","latitude") # this pulls out lat/long
 class(nc_contig_data)
 
 # now export the spatial points data frame as a shapefile
-# add proj4 string
-proj4string(nc_contig_data) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(nc_contig_data,dsn=".",layer="opioid_overdose_nc_contig",driver="ESRI Shapefile")
-# this created a shapefile of all the data
+create_shapefile(nc_contig_data, "opioid_overdose_nc_contig")
+# # add proj4 string
+# proj4string(nc_contig_data) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(nc_contig_data,dsn=".",layer="opioid_overdose_nc_contig",driver="ESRI Shapefile")
+# # this created a shapefile of all the data
 
 # now subset the data to look at the data aggregated by months
 month_data = nc_contig_data_nsp %>%
@@ -238,74 +273,93 @@ data_5_19 = month_data[which(month_data$month_year=="5-2019"),]
 table(month_data$month_year, useNA = "always")
 
 # now create separate separate shapefiles for each month
-# data_1_18
-coordinates(data_1_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_1_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_1_18,dsn=".",layer="opioid_overdose_data_nc_contig_1_18",driver="ESRI Shapefile")
-# data_2_18
-coordinates(data_2_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_2_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_2_18,dsn=".",layer="opioid_overdose_data_nc_contig_2_18",driver="ESRI Shapefile")
-# data_3_18
-coordinates(data_3_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_3_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_3_18,dsn=".",layer="opioid_overdose_data_nc_contig_3_18",driver="ESRI Shapefile")
-# data_4_18
-coordinates(data_4_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_4_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_4_18,dsn=".",layer="opioid_overdose_data_nc_contig_4_18",driver="ESRI Shapefile")
-# data_5_18
-coordinates(data_5_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_5_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_5_18,dsn=".",layer="opioid_overdose_data_nc_contig_5_18",driver="ESRI Shapefile")
-# data_6_18
-coordinates(data_6_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_6_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_6_18,dsn=".",layer="opioid_overdose_data_nc_contig_6_18",driver="ESRI Shapefile")
-# data_7_18
-coordinates(data_7_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_7_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_7_18,dsn=".",layer="opioid_overdose_data_nc_contig_7_18",driver="ESRI Shapefile")
-# data_8_18
-coordinates(data_8_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_8_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_8_18,dsn=".",layer="opioid_overdose_data_nc_contig_8_18",driver="ESRI Shapefile")
-# data_9_18
-coordinates(data_9_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_9_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_9_18,dsn=".",layer="opioid_overdose_data_nc_contig_9_18",driver="ESRI Shapefile")
-# data_10_18
-coordinates(data_10_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_10_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_10_18,dsn=".",layer="opioid_overdose_data_nc_contig_10_18",driver="ESRI Shapefile")
-# data_11_18
-coordinates(data_11_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_11_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_11_18,dsn=".",layer="opioid_overdose_data_nc_contig_11_18",driver="ESRI Shapefile")
-# data_12_18
-coordinates(data_12_18) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_12_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_12_18,dsn=".",layer="opioid_overdose_data_nc_contig_12_18",driver="ESRI Shapefile")
-# data_1_19
-coordinates(data_1_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_1_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_1_19,dsn=".",layer="opioid_overdose_data_nc_contig_1_19",driver="ESRI Shapefile")
-# data_2_19
-coordinates(data_2_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_2_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_2_19,dsn=".",layer="opioid_overdose_data_nc_contig_2_19",driver="ESRI Shapefile")
-# data_3_19
-coordinates(data_3_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_3_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_3_19,dsn=".",layer="opioid_overdose_data_nc_contig_3_19",driver="ESRI Shapefile")
-# data_4_19
-coordinates(data_4_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_4_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_4_19,dsn=".",layer="opioid_overdose_data_nc_contig_4_19",driver="ESRI Shapefile")
-# data_5_19
-coordinates(data_5_19) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(data_5_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(data_5_19,dsn=".",layer="opioid_overdose_data_nc_contig_5_19",driver="ESRI Shapefile")
+create_shapefile(data_1_18, "opioid_overdose_data_nc_contig_1_18")
+create_shapefile(data_2_18, "opioid_overdose_data_nc_contig_2_18")
+create_shapefile(data_3_18, "opioid_overdose_data_nc_contig_3_18")
+create_shapefile(data_4_18, "opioid_overdose_data_nc_contig_4_18")
+create_shapefile(data_5_18, "opioid_overdose_data_nc_contig_5_18")
+create_shapefile(data_6_18, "opioid_overdose_data_nc_contig_6_18")
+create_shapefile(data_7_18, "opioid_overdose_data_nc_contig_7_18")
+create_shapefile(data_8_18, "opioid_overdose_data_nc_contig_8_18")
+create_shapefile(data_9_18, "opioid_overdose_data_nc_contig_9_18")
+create_shapefile(data_10_18, "opioid_overdose_data_nc_contig_10_18")
+create_shapefile(data_11_18, "opioid_overdose_data_nc_contig_11_18")
+create_shapefile(data_12_18, "opioid_overdose_data_nc_contig_12_18")
+create_shapefile(data_1_19, "opioid_overdose_data_nc_contig_1_19")
+create_shapefile(data_2_19, "opioid_overdose_data_nc_contig_2_19")
+create_shapefile(data_3_19, "opioid_overdose_data_nc_contig_3_19")
+create_shapefile(data_4_19, "opioid_overdose_data_nc_contig_4_19")
+create_shapefile(data_5_19, "opioid_overdose_data_nc_contig_5_19")
+
+
+# # data_1_18
+# coordinates(data_1_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_1_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_1_18,dsn=".",layer="opioid_overdose_data_nc_contig_1_18",driver="ESRI Shapefile")
+# # data_2_18
+# coordinates(data_2_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_2_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_2_18,dsn=".",layer="opioid_overdose_data_nc_contig_2_18",driver="ESRI Shapefile")
+# # data_3_18
+# coordinates(data_3_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_3_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_3_18,dsn=".",layer="opioid_overdose_data_nc_contig_3_18",driver="ESRI Shapefile")
+# # data_4_18
+# coordinates(data_4_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_4_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_4_18,dsn=".",layer="opioid_overdose_data_nc_contig_4_18",driver="ESRI Shapefile")
+# # data_5_18
+# coordinates(data_5_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_5_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_5_18,dsn=".",layer="opioid_overdose_data_nc_contig_5_18",driver="ESRI Shapefile")
+# # data_6_18
+# coordinates(data_6_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_6_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_6_18,dsn=".",layer="opioid_overdose_data_nc_contig_6_18",driver="ESRI Shapefile")
+# # data_7_18
+# coordinates(data_7_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_7_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_7_18,dsn=".",layer="opioid_overdose_data_nc_contig_7_18",driver="ESRI Shapefile")
+# # data_8_18
+# coordinates(data_8_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_8_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_8_18,dsn=".",layer="opioid_overdose_data_nc_contig_8_18",driver="ESRI Shapefile")
+# # data_9_18
+# coordinates(data_9_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_9_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_9_18,dsn=".",layer="opioid_overdose_data_nc_contig_9_18",driver="ESRI Shapefile")
+# # data_10_18
+# coordinates(data_10_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_10_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_10_18,dsn=".",layer="opioid_overdose_data_nc_contig_10_18",driver="ESRI Shapefile")
+# # data_11_18
+# coordinates(data_11_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_11_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_11_18,dsn=".",layer="opioid_overdose_data_nc_contig_11_18",driver="ESRI Shapefile")
+# # data_12_18
+# coordinates(data_12_18) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_12_18) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_12_18,dsn=".",layer="opioid_overdose_data_nc_contig_12_18",driver="ESRI Shapefile")
+# # data_1_19
+# coordinates(data_1_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_1_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_1_19,dsn=".",layer="opioid_overdose_data_nc_contig_1_19",driver="ESRI Shapefile")
+# # data_2_19
+# coordinates(data_2_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_2_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_2_19,dsn=".",layer="opioid_overdose_data_nc_contig_2_19",driver="ESRI Shapefile")
+# # data_3_19
+# coordinates(data_3_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_3_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_3_19,dsn=".",layer="opioid_overdose_data_nc_contig_3_19",driver="ESRI Shapefile")
+# # data_4_19
+# coordinates(data_4_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_4_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_4_19,dsn=".",layer="opioid_overdose_data_nc_contig_4_19",driver="ESRI Shapefile")
+# # data_5_19
+# coordinates(data_5_19) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(data_5_19) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(data_5_19,dsn=".",layer="opioid_overdose_data_nc_contig_5_19",driver="ESRI Shapefile")
 
 # now aggregate by year
 year_data = nc_contig_data_nsp %>%
@@ -320,14 +374,17 @@ year_data_2019 = year_data[which(year_data$year=="2019"),]
 table(year_data$year, useNA = "always")
 
 # now make separate shape files for each year
-# 2018
-coordinates(year_data_2018) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(year_data_2018) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(year_data_2018,dsn=".",layer="opioid_overdose_year_data_nc_contig_2018",driver="ESRI Shapefile")
-# 2019
-coordinates(year_data_2019) <- c("longitude","latitude") # this pulls out lat/long
-proj4string(year_data_2019) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
-writeOGR(year_data_2019,dsn=".",layer="opioid_overdose_year_data_nc_contig_2019",driver="ESRI Shapefile")
+create_shapefile(year_data_2018, "opioid_overdose_year_data_nc_contig_2018")
+create_shapefile(year_data_2019, "opioid_overdose_year_data_nc_contig_2019")
+
+# # 2018
+# coordinates(year_data_2018) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(year_data_2018) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(year_data_2018,dsn=".",layer="opioid_overdose_year_data_nc_contig_2018",driver="ESRI Shapefile")
+# # 2019
+# coordinates(year_data_2019) <- c("longitude","latitude") # this pulls out lat/long
+# proj4string(year_data_2019) <- CRS("+init=epsg:4326") # this sets the geographical projection (WGS 1984)
+# writeOGR(year_data_2019,dsn=".",layer="opioid_overdose_year_data_nc_contig_2019",driver="ESRI Shapefile")
 
 
 
