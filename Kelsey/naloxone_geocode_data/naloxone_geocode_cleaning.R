@@ -1,13 +1,14 @@
 # ----------------------------------------- #
 #          NC DETECT Spatial Project        #
 #           Naloxone Geocoded Data          #
-#    Trying to Merge in Census Data in R    #
+#              Cleaning Data                #
 #              May 10, 2019                 #
 #                K. Sumner                  #
 # ----------------------------------------- #
 
 # what this is doing: 
-# reading in the naloxone geocoded data set, merging with census data at the tract level
+# reading in the naloxone geocoded data set, cleaning it before we merge with census data in a later script
+
 
 #### ------- load the libraries ---------- ####
 
