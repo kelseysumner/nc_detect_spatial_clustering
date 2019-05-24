@@ -96,6 +96,46 @@ length(unique(this_data_merged$GEOID)) # 1830, which is correct
 # write out the sf_merged object as a shapefile
 st_write(sf_merged, "naloxone_data_tract_level.shp")
 
+# need to aggregate on some level
+
+
+#### ----------- aggregate data on year, month, and week levels for each census tract -------- ####
+
+# aggregate to year level
+mydata_year = mydata %>%
+  group_by(GEOID) %>%
+  summarize(nalox_count = n())
+# make shapefile
+year_shp = left_join(mydata_year,nc_sf,by="GEOID")
+length(unique(year_shp$GEOID)) # 1830, this is correct
+year_shp = year_shp[which(!(is.na(year_shp$geometry))),] # didn't lose any, good
+length(unique(year_shp$GEOID)) # 1830, good
+st_write(year_shp, "naloxone_data_tract_level_by_year.shp")
+
+# aggregate to month level
+mydata_month = mydata %>%
+  mutate(date=lubridate::mdy(unitnotf_1)) %>%
+  mutate(month = lubridate::month(date)) %>%
+  group_by(GEOID, month) %>%
+  summarize(nalox_count = n())
+# make shapefile
+month_shp = left_join(mydata_month,nc_sf,by="GEOID")
+length(unique(month_shp$GEOID)) # 1830, this is correct
+month_shp = month_shp[which(!(is.na(month_shp$geometry))),] # didn't lose any, good
+length(unique(month_shp$GEOID)) # 1830, good
+st_write(month_shp, "naloxone_data_tract_level_by_month.shp")
+
+# aggregate to week level
+mydata_week = mydata %>%
+  group_by(GEOID, week) %>%
+  summarize(nalox_count = n())
+# make shapefile
+week_shp = left_join(mydata_week,nc_sf,by="GEOID")
+length(unique(week_shp$GEOID)) # 1830, this is correct
+week_shp = week_shp[which(!(is.na(week_shp$geometry))),] # didn't lose any, good
+length(unique(week_shp$GEOID)) # 1830, good
+st_write(week_shp, "naloxone_data_tract_level_by_week.shp")
+
 
 
 
