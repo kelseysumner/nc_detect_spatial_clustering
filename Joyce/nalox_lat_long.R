@@ -30,11 +30,23 @@ for (i in 1:nrow(nc_sf)) {
   
 }
 
-centroids %>% filter(is.na(lat) | is.na(long))  # census tracts had empty multipolygons in geometry
+centroids %>% filter(is.na(lat) | is.na(long))  # 3 census tracts had empty multipolygons in geometry
 
 centroids = centroids %>%
-  filter(!is.na(lat) & !is.na(long)) #remove census tracts with NA lat/long
+  filter(!is.na(lat) & !is.na(long)) %>% #remove census tracts with NA lat/long
+  mutate(fips = as.numeric(GEOID)) %>%
+  dplyr::select(fips, lat, long)
+
 
 write.csv(centroids, "census_tract_latlong.csv", row.names = FALSE)
 
+
+
+# join with naloxone EMS data
+nalox_data = read_csv("./clean_nalox_data.csv")
+
+nalox_data_with_latlong = centroids %>%
+  right_join(nalox_data, by = "fips")
+
+write.csv(nalox_data_with_latlong, "clean_nalox_data_latlong.csv", row.names = FALSE)
 
