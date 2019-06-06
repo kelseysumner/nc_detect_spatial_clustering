@@ -22,6 +22,8 @@ library(tidyverse)
 # set working directory
 setwd("C://Users//kelseyms//OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
 
+#setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Naloxone Geocoded Data")
+
 # read in the cleaned naloxone data with the lat and long centroid pulled out
 nalox_data0 = read_csv("./clean_nalox_data_latlong.csv")
 
@@ -99,13 +101,13 @@ nalox_data$date = lubridate::mdy(nalox_data$date)
 # set up the first start and end dates
 orig_start_date=lubridate::mdy("12/31/2016")
 orig_end_date=lubridate::mdy("1/30/2017")
-i=1
+
 # start the for loop
 for (i in 1:5){   # used first 30 days of year as baseline (365-30=335)
   
   # set up dates
-  start_date = orig_start_date+i
-  end_date = orig_end_date+i
+  start_date = str_replace_all(as.character(orig_start_date+i),"-","/")
+  end_date = str_replace_all(as.character(orig_end_date+i),"-","/")
   
   # subset data to just the data between the start and end dates
   subset_data = nalox_data[which(nalox_data$date >= start_date & nalox_data$date <= end_date),]
@@ -121,34 +123,48 @@ for (i in 1:5){   # used first 30 days of year as baseline (365-30=335)
   
   # see ss.options() for more information
   ss.options(list(CaseFile="nalox.cas", PrecisionCaseTimes=3)) #0 - None, 1 = Year, 2 = Month, 3 = Day, 4 = Generic
-  ss.options(list(StartDate=str_replace_all(as.character(start_date),"-","/"),EndDate=str_replace_all(as.character(end_date),"-","/")))
+  ss.options(list(StartDate=start_date,EndDate=end_date))
   ss.options(list(CoordinatesFile="nalox.geo", AnalysisType=4, ModelType=2, TimeAggregationUnits=3, TimeAggregationLength = 1))
   ss.options(list(UseDistanceFromCenterOption="n"))
   ss.options(list(MaxTemporalSizeInterpretation=1, MaxTemporalSize=1))
   ss.options(list(ReportGiniClusters="n", LogRunToHistoryFile="y", ResultsFile = "./naloxResults.txt"))
   
   # writing files out to temporary directory
-  newdir = paste0("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/",as.character(i))
-  dir.create(newdir)
-  write.ss.prm(newdir, "nalox") # create a PRM (parameter) file in td
-  write.cas(naloxCas, newdir, "nalox") # create a Case file 
-  write.geo(naloxGeo, newdir, "nalox") # create a Coordinates file 
+  td = tempdir()
+  write.ss.prm(td, "nalox") # create a PRM (parameter) file in td
+  write.cas(naloxCas, td, "nalox") # create a Case file 
+  write.geo(naloxGeo, td, "nalox") # create a Coordinates file 
   
   # running satscan
-  nalox = satscan(newdir, "nalox", sslocation = "C:\\Program Files\\SaTScan")
+  nalox = satscan(td, "nalox", sslocation = "C:\\Program Files\\SaTScan")
   
-
+  
+  # look at satscan result
+  summary(nalox)
+  summary.default(nalox)
+  nalox$col
+  sp::plot(nalox$shapeclust)
+  
+  
+  #copy files from temporary directory to new directory
+  newdir = paste0("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/",as.character(i))
+  #newdir = paste0("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Naloxone Geocoded Data\\satscan\\",as.character(i))
+  dir.create(newdir)
+  file.copy(file.path(td, list.files(td)), newdir)
   
 # end the for loop  
 }
 
 
 
-# look at satscan result
-summary(nalox)
-summary.default(nalox)
-nalox$col
-sp::plot(nalox$shapeclust)
+
+
+
+
+
+
+
+
 
 
 
