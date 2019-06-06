@@ -3,7 +3,9 @@ library(rsatscan)
 
 
 #### med drug data - Replicate Subset_7Day analysis
-setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Opioid Overdose Data\\SaTScan\\NC and nearby states")
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/NC and nearby states")
+
+#setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Opioid Overdose Data\\SaTScan\\NC and nearby states")
 
 MedDrugCas = read.table("Cases.cas", col.names = c("zip", "cases", "date"))
 MedDrugGeo = read.table("Coordinates.geo", col.names = c("zip", "lat", "long"))
