@@ -144,14 +144,6 @@ for (i in 1:5){   # used first 30 days of year as baseline (365-30=335)
 
 
 
-
-
-
-
-
-
-
-
 # look at satscan result
 summary(nalox)
 summary.default(nalox)
