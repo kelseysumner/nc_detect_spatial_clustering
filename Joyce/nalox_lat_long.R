@@ -1,8 +1,8 @@
 library(tidyverse)
 library(sf)
 
-setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Naloxone Geocoded Data")
-
+#setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Naloxone Geocoded Data")
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
 
 ## get spatial data from tidy census
 nc_sf = tidycensus::get_acs(geography = "tract", state = "NC", 
@@ -15,7 +15,7 @@ nc_sf = tidycensus::get_acs(geography = "tract", state = "NC",
 
 # pull lat/long out for each census tract by averaging points in each polygon
 centroids = matrix(data = NA, nrow = nrow(nc_sf), ncol = 3) %>% as.data.frame()
-colnames(centroids) = c("GEOID", "lat", "long")
+colnames(centroids) = c("GEOID", "long", "lat")
 centroids$GEOID = nc_sf$GEOID
 for (i in 1:nrow(nc_sf)) {
   
