@@ -104,10 +104,13 @@ while(end_date <= max(nalox_data$date)) {
   newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
   dir.create(newdir)
   file.copy(file.path(td, list.files(td)), newdir)
-
+  
+  # clear the temp directory
+  file.remove(file.path(td, list.files(td)))
   
   start_date = start_date + 1
   end_date = end_date + 1
+
   
 # end the while loop  
 }
@@ -134,7 +137,7 @@ clusters_countynames = clusters %>%
   select(-NAME)
 
 # export all clusters, regardless of significance
-write.csv(clusters_countynames, file.path(results_dir, "clusters.csv"))
+write.csv(clusters_countynames, file.path(results_dir, "clusters.csv"), row.names = FALSE)
 
 # zip codes are not perfectly nested within census tracts/counties so cannot add
 
@@ -143,7 +146,7 @@ sig_clusters = clusters_countynames %>%
   filter(p_value < 0.05)
 
 # write out the significant clusters
-write_csv(sig_clusters, file.path(results_dir,"sig_clusters.csv"))
+write_csv(sig_clusters, file.path(results_dir,"sig_clusters.csv"), row.names = FALSE)
 
 # cluster data with p-values and geometries -- make into shapefile?
 cluster_sf = clusters %>%
