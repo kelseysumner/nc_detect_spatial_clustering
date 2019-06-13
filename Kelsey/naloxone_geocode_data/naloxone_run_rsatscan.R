@@ -104,10 +104,13 @@ while(end_date <= max(nalox_data$date)) {
   newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
   dir.create(newdir)
   file.copy(file.path(td, list.files(td)), newdir)
-
+  
+  # clear the temp directory
+  file.remove(file.path(td, list.files(td)))
   
   start_date = start_date + 1
   end_date = end_date + 1
+
   
 # end the while loop  
 }
