@@ -2,7 +2,10 @@ detach("package:rsatscan",unload=T)
 library(rsatscan)
 library(tidyverse)
 
-setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/")
+#setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/")
+
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/")
+
 
 medDrug_data = read.csv("./Subset_OpioidData.csv") %>%
   mutate(visitdate = lubridate::ymd(visitdate)) %>%
@@ -10,8 +13,8 @@ medDrug_data = read.csv("./Subset_OpioidData.csv") %>%
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
 
-study_length = 30
-#study_length = 7
+#study_length = 30
+study_length = 7
 
 #larger folder containing folders for each day
 results_dir =  file.path(getwd(), paste0(study_length, "_days")) 
@@ -53,8 +56,8 @@ while(end_date <= max(medDrug_data$visitdate)) {
   write.geo(medDrugGeo, td, "medDrug") # create a Coordinates file 
   
   # running satscan
-  medDrug = satscan(td, "medDrug")
-  #medDrug = satscan(td, "medDrug", sslocation = "C:\\Program Files\\SaTScan")
+  #medDrug = satscan(td, "medDrug")
+  medDrug = satscan(td, "medDrug", sslocation = "C:\\Program Files\\SaTScan")
   
   # look at satscan result
   summary(medDrug)
@@ -62,7 +65,7 @@ while(end_date <= max(medDrug_data$visitdate)) {
   medDrug$col
   #sp::plot(medDrug$shapeclust)
   
-  clusters_alldays = rbind(clusters, medDrug$col)
+  clusters_alldays = rbind(clusters_alldays, medDrug$col)
   
   #copy files from temporary directory to new directory
   newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
