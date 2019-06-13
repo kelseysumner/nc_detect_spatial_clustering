@@ -13,6 +13,7 @@
 #### ------- load the libraries ---------- ####
 
 # load in the libraries of interest
+detach("package:rsatscan",unload=T)
 library(rsatscan)
 library(tidyverse)
 
