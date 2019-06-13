@@ -13,7 +13,7 @@
 #### ------- load the libraries ---------- ####
 
 # load in the libraries of interest
-detach("package:rsatscan",unload=T)
+#detach("package:rsatscan",unload=T)
 library(rsatscan)
 library(tidyverse)
 
@@ -21,9 +21,9 @@ library(tidyverse)
 #### ------- read in the data sets ---------- ####
 
 # set working directory
-#setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
 
-setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Naloxone Geocoded Data")
+#setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Naloxone Geocoded Data")
 
 # read in the cleaned naloxone data with the lat and long centroid pulled out
 nalox_data0 = read_csv("./clean_nalox_data_latlong.csv")
@@ -32,8 +32,8 @@ nalox_data0 = read_csv("./clean_nalox_data_latlong.csv")
 #### ---------- automate satscan -------- ####
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
-study_length = 30
-#study_length = 10
+#study_length = 30
+study_length = 10
 
 
 # check for repeat day and census tract combos
@@ -87,8 +87,8 @@ while(end_date <= max(nalox_data$date)) {
   write.geo(naloxGeo, td, "nalox") # create a Coordinates file 
   
   # running satscan
-  nalox = satscan(td, "nalox")
-  #nalox = satscan(td, "nalox", sslocation = "C:\\Program Files\\SaTScan")
+  #nalox = satscan(td, "nalox")
+  nalox = satscan(td, "nalox", sslocation = "C:\\Program Files\\SaTScan")
   
   
   # look at satscan result
@@ -132,12 +132,14 @@ clusters_countynames = clusters %>%
   mutate(county = str_extract(NAME, "(?<=,\\s)[^,]+(?=\\sCounty)")) %>% #pull characters between ", " and " County"
   select(-NAME)
 
+# zip codes are not perfectly nested within census tracts/counties so cannot add
 
 #significant clusters
 sig_clusters = clusters_countynames %>%
   filter(p_value < 0.05)
 
-
+# write out the significant clusters
+write_csv(sig_clusters, file.path(results_dir,"sig_clusters.csv"))
 
 
 
