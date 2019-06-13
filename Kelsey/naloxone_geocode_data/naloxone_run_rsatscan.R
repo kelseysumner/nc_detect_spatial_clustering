@@ -33,7 +33,7 @@ nalox_data0 = read_csv("./clean_nalox_data_latlong.csv")
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
 #study_length = 30
-study_length = 10
+study_length = 7
 
 
 # check for repeat day and census tract combos
@@ -113,9 +113,9 @@ while(end_date <= max(nalox_data$date)) {
 
 #all clusters from for loop
 clusters = clusters %>%
-  select(fips = LOC_ID, lat = LATITUDE, long = LONGITUDE, date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
+  select(fips = LOC_ID, lat = LATITUDE, long = LONGITUDE, radius = RADIUS, date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
 
-write.csv(clusters, file.path(results_dir, "clusters.csv"))
+
 
 
 
@@ -128,9 +128,12 @@ nc_sf = tidycensus::get_acs(geography = "tract", state = "NC",
 
 clusters_countynames = clusters %>%
   left_join(nc_sf, by = c("fips" = "GEOID")) %>%
-  select(fips, lat, long, date, NAME, number_loc, p_value) %>%
+  select(fips, lat, long, radius, date, NAME, number_loc, p_value) %>%
   mutate(county = str_extract(NAME, "(?<=,\\s)[^,]+(?=\\sCounty)")) %>% #pull characters between ", " and " County"
   select(-NAME)
+
+# export all clusters, regardless of significance
+write.csv(clusters_countynames, file.path(results_dir, "clusters.csv"))
 
 # zip codes are not perfectly nested within census tracts/counties so cannot add
 
@@ -141,8 +144,16 @@ sig_clusters = clusters_countynames %>%
 # write out the significant clusters
 write_csv(sig_clusters, file.path(results_dir,"sig_clusters.csv"))
 
+# cluster data with p-values and geometries -- make into shapefile?
+cluster_sf = clusters %>%
+  left_join(nc_sf, by = c("fips" = "GEOID")) %>%
+  select(fips, date, NAME, number_loc, p_value, lat, long, radius, geometry) %>%
+  mutate(county = str_extract(NAME, "(?<=,\\s)[^,]+(?=\\sCounty)")) %>% #pull characters between ", " and " County"
+  select(-NAME) %>%
+  filter(p_value < 0.05)
 
-
+# write out cluster_sf to a shapefile
+sf::st_write(cluster_sf,file.path(results_dir,paste0(study_length,"days_satscan_sig_clusters.shp")))
 
 
 
