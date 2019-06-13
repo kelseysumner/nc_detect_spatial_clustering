@@ -115,10 +115,6 @@ while(end_date <= max(nalox_data$date)) {
 clusters = clusters %>%
   select(fips = LOC_ID, lat = LATITUDE, long = LONGITUDE, date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
 
-write.csv(clusters, file.path(results_dir, "clusters.csv"))
-
-
-
 #add column of county names to clusters
 nc_sf = tidycensus::get_acs(geography = "tract", state = "NC", 
                             variables = "B19013_001", #B19013_001 is median household income, #B01001_001 is total of males and females
@@ -126,16 +122,29 @@ nc_sf = tidycensus::get_acs(geography = "tract", state = "NC",
                             key="23ce49809ba6fbffdf7a68cc93010b5e171ba5e0") %>%
   rename(totpop = summary_est)
 
+#add county name to cluster dataset
 clusters_countynames = clusters %>%
   left_join(nc_sf, by = c("fips" = "GEOID")) %>%
   select(fips, lat, long, date, NAME, number_loc, p_value) %>%
   mutate(county = str_extract(NAME, "(?<=,\\s)[^,]+(?=\\sCounty)")) %>% #pull characters between ", " and " County"
   select(-NAME)
 
+write.csv(clusters_countynames, file.path(results_dir, "clusters.csv"), row.names = FALSE)
 
-#significant clusters
+# significant clusters
 sig_clusters = clusters_countynames %>%
   filter(p_value < 0.05)
+
+write.csv(sig_clusters, file.path(results_dir, "sig_clusters.csv"), row.names = FALSE)
+
+
+# cluster data with p-values and geometries -- make into shapefile?
+cluster_sf = clusters %>%
+  left_join(nc_sf, by = c("fips" = "GEOID")) %>%
+  select(fips, date, NAME, number_loc, p_value, geometry) %>%
+  mutate(county = str_extract(NAME, "(?<=,\\s)[^,]+(?=\\sCounty)")) %>% #pull characters between ", " and " County"
+  select(-NAME)
+
 
 
 
