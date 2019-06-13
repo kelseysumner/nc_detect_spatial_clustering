@@ -154,6 +154,10 @@ cluster_sf = clusters %>%
   filter(p_value < 0.05)
 
 # write out cluster_sf to a shapefile
+if (sum(str_detect(list.files(results_dir), "days_satscan_sig_clusters")) > 0) {
+  file.remove(file.path(results_dir, list.files(results_dir)[str_detect(list.files(results_dir), "days_satscan_sig_clusters")]))
+}
+
 sf::st_write(cluster_sf,file.path(results_dir,paste0(study_length,"days_satscan_sig_clusters.shp")))
 
 
