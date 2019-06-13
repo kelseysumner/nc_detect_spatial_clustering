@@ -1,12 +1,12 @@
 # ----------------------------------------------- #
 #          NC DETECT Spatial Project              #
-#           Naloxone qSum data                    #
+#           Naloxone CUSUM data                    #
 #              June 6, 2019                       #
 #                K. Sumner                        #
 # ----------------------------------------------- #
 
 # what this is doing: 
-# reading in the NC DETECT naloxone qsum cluster data and adding lat/long to it and making it a shapefile for comparison 
+# reading in the NC DETECT naloxone CUSUM cluster data and adding lat/long to it and making it a shapefile for comparison 
 
 
 #### ------- load the libraries ---------- ####
@@ -24,9 +24,10 @@ library(foreign)
 
 # set working directory
 setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
+setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Naloxone Geocoded Data")
 
 # read in the cleaned naloxone data with the lat and long centroid pulled out
-qsum_data = read_csv("EMSNaloxone2017annotationOverview_qsum.csv")
+cusum_data = read_csv("EMSNaloxone2017annotationOverview_cusum.csv")
 
 # find latitude and longitude for the counties
 # get spatial data from tidy census
@@ -34,7 +35,7 @@ nc_sf = tidycensus::get_acs(geography = "county", state = "NC",
                             variables = "B19013_001",
                             summary_var = "B01001_001", geometry = TRUE,  
                             key="23ce49809ba6fbffdf7a68cc93010b5e171ba5e0") %>%
-  rename(totpop = estimate)
+  rename(totpop = summary_est)
 plot(nc_sf %>% st_geometry()) 
 
 # create a new variable that is just the county name for nc_sf
@@ -47,27 +48,27 @@ nc_sf$Location = Location
 # change new to new hanover
 nc_sf$Location[which(nc_sf$Location=="New")]="New Hanover"
 # cherokee tribal gets dropped - is this different than Cherokee?
-# for now, recode cherokee tribal as cherokee in the qsum data set
-qsum_data$Location[which(qsum_data$Location=="Cherokee Tribal")]="Cherokee"
+# for now, recode cherokee tribal as cherokee in the cusum data set
+cusum_data$Location[which(cusum_data$Location=="Cherokee Tribal")]="Cherokee"
 
 # make sure all the data sets have geoid coded correctly
 nc_sf$Location = as.character(nc_sf$Location)
-qsum_data$Location = as.character(qsum_data$Location)
+cusum_data$Location = as.character(cusum_data$Location)
 
 # look at how many entries are in your data set for geoid
 length(unique(nc_sf$Location)) # 100, good
-length(unique(qsum_data$Location)) # only 57
+length(unique(cusum_data$Location)) # only 57
 
 # first merge in the data set to the spatial ones
 # nc_sf
-sf_merged = left_join(qsum_data,nc_sf,by="Location")
+sf_merged = left_join(cusum_data,nc_sf,by="Location")
 colnames(sf_merged)
 length(unique(sf_merged$Location)) # 57, good
 sf_merged = sf_merged[which(!(is.na(sf_merged$GEOID))),] # kept all
 length(unique(sf_merged$Location)) # 57, good
 
 # write out the sf_merged object as a shapefile
-#st_write(sf_merged, "qsum_data_county_level_shapefile_by_day.shp")
+#st_write(sf_merged, "cusum_data_county_level_shapefile_by_day.shp")
 
 
 
