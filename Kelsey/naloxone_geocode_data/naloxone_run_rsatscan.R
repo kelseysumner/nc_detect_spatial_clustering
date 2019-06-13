@@ -32,9 +32,9 @@ nalox_data0 = read_csv("./clean_nalox_data_latlong.csv")
 #### ---------- automate satscan -------- ####
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
-study_length = 30
+#study_length = 30
 #study_length = 7
-#study_length = 10
+study_length = 10
 
 
 # check for repeat day and census tract combos
