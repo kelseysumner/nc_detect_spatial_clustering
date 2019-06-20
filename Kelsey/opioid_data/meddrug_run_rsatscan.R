@@ -9,7 +9,8 @@ setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/
 
 medDrug_data = read.csv("./Subset_OpioidData.csv") %>%
   mutate(visitdate = lubridate::ymd(visitdate)) %>%
-  select(-X)
+  select(-X) %>% 
+  filter(state == "NC")
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
 
@@ -67,10 +68,10 @@ while(end_date <= max(medDrug_data$visitdate)) {
   
   clusters_alldays = rbind(clusters_alldays, medDrug$col)
   
-  #copy files from temporary directory to new directory
-  newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
-  dir.create(newdir)
-  file.copy(file.path(td, list.files(td)), newdir)
+  # #copy files from temporary directory to new directory
+  # newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
+  # dir.create(newdir)
+  # file.copy(file.path(td, list.files(td)), newdir)
   
   
   start_date = start_date + 1
