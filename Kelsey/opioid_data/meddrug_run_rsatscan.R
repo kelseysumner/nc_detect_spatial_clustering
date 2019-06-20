@@ -14,8 +14,8 @@ medDrug_data = read.csv("./Subset_OpioidData.csv") %>%
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
 
-#study_length = 30
-study_length = 7
+study_length = 30
+#study_length = 7
 
 #larger folder containing folders for each day
 results_dir =  file.path(getwd(), paste0(study_length, "_days")) 

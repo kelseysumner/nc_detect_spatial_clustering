@@ -62,7 +62,95 @@ write.dbf(satscan_30_day_buffers,"7day_sig_clusters_buffer.dbf")
 
 
 
+## subset the 7 day opioid overdose data significant cluster data sets to just be in the 1 year period (2018)
 
+# set working directory
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days")
+
+# read in the cleaned data with the lat and long centroid pulled out
+opioid_data = read_csv("./sig_clusters.csv")
+
+# change the month variable
+opioid_data$month = month(opioid_data$date)
+table(opioid_data$month, useNA = "always")
+
+# restrict the data set to just being within 2018
+opioid_data$year = year(opioid_data$date)
+table(opioid_data$year, useNA = "always")
+opioid_data = opioid_data[which(opioid_data$year == "2018"),]
+
+# now export
+write_csv(opioid_data,"sig_clusters_subset.csv")
+
+
+
+## subset the 30 day opioid overdose data significant cluster data sets to just be in the 1 year period (2018)
+
+# set working directory
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days")
+
+# read in the cleaned data with the lat and long centroid pulled out
+opioid_data = read_csv("./sig_clusters.csv")
+
+# change the month variable
+opioid_data$month = month(opioid_data$date)
+table(opioid_data$month, useNA = "always")
+
+# restrict the data set to just being within 2018
+opioid_data$year = year(opioid_data$date)
+table(opioid_data$year, useNA = "always")
+opioid_data = opioid_data[which(opioid_data$year == "2018"),]
+
+# now export
+write_csv(opioid_data,"sig_clusters_subset.csv")
+
+
+
+
+
+## subset the 7 day gi data significant cluster data sets to just be in the 1 year period (2018)
+
+# set working directory
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days")
+
+# read in the cleaned data with the lat and long centroid pulled out
+gi_data = read_csv("./sig_clusters.csv")
+
+# change the month variable
+gi_data$month = month(gi_data$date)
+table(gi_data$month, useNA = "always")
+
+# restrict the data set to just being within 2018
+gi_data$year = year(gi_data$date)
+table(gi_data$year, useNA = "always")
+gi_data = gi_data[which(gi_data$year == "2018"),]
+
+# now export
+write_csv(gi_data,"sig_clusters_subset.csv")
+
+
+
+
+
+## subset the 30 day gi data significant cluster data sets to just be in the 1 year period (2018)
+
+# set working directory
+setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days")
+
+# read in the cleaned data with the lat and long centroid pulled out
+gi_data = read_csv("./sig_clusters.csv")
+
+# change the month variable
+gi_data$month = month(gi_data$date)
+table(gi_data$month, useNA = "always")
+
+# restrict the data set to just being within 2018
+gi_data$year = year(gi_data$date)
+table(gi_data$year, useNA = "always")
+gi_data = gi_data[which(gi_data$year == "2018"),]
+
+# now export
+write_csv(gi_data,"sig_clusters_subset.csv")
 
 
 
