@@ -1,22 +1,23 @@
 library(tidyverse)
 
-setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/GI visit data")
+setwd("C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/")
+#setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/")
 
 #study_length = 7
 
 for (study_length in c(7,30)) {
-
+  
   #larger folder containing folders for each day
-  results_dir =  file.path(getwd(), "rsatscan", paste0(study_length, "_days")) 
+  results_dir =  file.path(getwd(), paste0(study_length, "_days")) 
   
   #### ---------- Plots and Tables for Days with High Cluster Counts ------------ #####
   
   sig_clusters = read.csv(file.path(results_dir, "sig_clusters.csv"))
   
-  # are there particular days with high cluster counts?
-  # highest count is 2 clusters on the same day
-  sig_clusters %>% group_by(date) %>% summarize(Count = n()) %>% arrange(desc(Count))
   
+  # are there particular days with high cluster counts?
+  # highest count is 1 cluster on the same day
+  sig_clusters %>% group_by(date) %>% summarize(Count = n()) %>% arrange(desc(Count))
   
   
   sig_clusters_plot = sig_clusters %>%
@@ -46,5 +47,5 @@ for (study_length in c(7,30)) {
     labs(x = "", y = "", title = paste0("Significant Daily Clusters - ", study_length, " Day Baseline")) +
     scale_color_manual(name = "",  labels = c("Number of\nLocations", "Radius (km)"), values = c("cornflowerblue", "navyblue"))
   
-  ggsave(file.path(results_dir, paste0("gi_sig_clusters_plot_", study_length, "day.png")), width = 6, height = 4)
+  ggsave(file.path(results_dir, paste0("meddrug_sig_clusters_plot_", study_length, "day.png")), width = 6, height = 4)
 }
