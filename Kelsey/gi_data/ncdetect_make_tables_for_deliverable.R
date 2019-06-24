@@ -19,18 +19,41 @@ library(lubridate)
 
 
 # load in the med/drug data sets
-opioid_7day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days/sig_clusters_subset.csv")
-opioid_30day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days/sig_clusters_subset.csv")
+opioid_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days/sig_clusters_subset.csv")
+opioid_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days/sig_clusters_subset.csv")
 
 
 # load in the gi data sets
-gi_7day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days/sig_clusters_subset.csv")
-gi_30day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days/sig_clusters_subset.csv")
+gi_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days/sig_clusters_subset.csv")
+gi_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days/sig_clusters_subset.csv")
 
 
 # load in the naloxone data sets
-nalox_7day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/7_days/sig_clusters.csv")
-nalox_30day = read_csv("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/30_days/sig_clusters.csv")
+nalox_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/7_days/sig_clusters.csv")
+nalox_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/30_days/sig_clusters.csv")
+
+
+#### -------- look at summaries of the different data sets -------- #### 
+
+# summary opioid data
+summary(opioid_7day)
+nrow(opioid_7day)
+summary(opioid_30day)
+nrow(opioid_30day)
+
+# summary gi data
+summary(gi_7day)
+nrow(gi_7day)
+summary(gi_30day)
+nrow(gi_30day)
+
+
+# summary naloxone data
+summary(nalox_7day)
+nrow(nalox_7day)
+summary(nalox_30day)
+nrow(nalox_30day)
+
 
 
 
