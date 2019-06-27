@@ -65,7 +65,7 @@ write.dbf(satscan_30_day_buffers,"7day_sig_clusters_buffer.dbf")
 ## subset the 7 day opioid overdose data significant cluster data sets to just be in the 1 year period (2018)
 
 # set working directory
-setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days")
+setwd("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days")
 
 # read in the cleaned data with the lat and long centroid pulled out
 opioid_data = read_csv("./sig_clusters.csv")
@@ -87,7 +87,7 @@ write_csv(opioid_data,"sig_clusters_subset.csv")
 ## subset the 30 day opioid overdose data significant cluster data sets to just be in the 1 year period (2018)
 
 # set working directory
-setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days")
+setwd("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days")
 
 # read in the cleaned data with the lat and long centroid pulled out
 opioid_data = read_csv("./sig_clusters.csv")
@@ -111,7 +111,8 @@ write_csv(opioid_data,"sig_clusters_subset.csv")
 ## subset the 7 day gi data significant cluster data sets to just be in the 1 year period (2018)
 
 # set working directory
-setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days")
+#setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days")
+setwd("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days")
 
 # read in the cleaned data with the lat and long centroid pulled out
 gi_data = read_csv("./sig_clusters.csv")
@@ -135,7 +136,9 @@ write_csv(gi_data,"sig_clusters_subset.csv")
 ## subset the 30 day gi data significant cluster data sets to just be in the 1 year period (2018)
 
 # set working directory
-setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days")
+#setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days")
+setwd("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days")
+
 
 # read in the cleaned data with the lat and long centroid pulled out
 gi_data = read_csv("./sig_clusters.csv")
