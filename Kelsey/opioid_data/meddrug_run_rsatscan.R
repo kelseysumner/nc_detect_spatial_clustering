@@ -9,13 +9,13 @@ setwd("C:/Users/kelseyms/OneDrive - University of North Carolina at Chapel Hill/
 
 medDrug_data = read.csv("./Subset_OpioidData.csv") %>%
   mutate(visitdate = lubridate::ymd(visitdate)) %>%
-  select(-X) %>% 
+  #select(-X) %>% 
   filter(state == "NC")
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
 
-study_length = 30
-#study_length = 7
+#study_length = 30
+study_length = 7
 
 #larger folder containing folders for each day
 results_dir =  file.path(getwd(), paste0(study_length, "_days")) 
@@ -36,8 +36,8 @@ while(end_date <= max(medDrug_data$visitdate)) {
   subset_data = medDrug_data[which(medDrug_data$visitdate >= start_date & medDrug_data$visitdate <= end_date),]
   
   # pull out just the variables of interest
-  medDrugCas = subset_data %>% select(zip,Count,visitdate) %>% as.data.frame()
-  medDrugGeo = subset_data %>% select(zip,latitude,longitude) %>% as.data.frame()
+  medDrugCas = subset_data %>% dplyr::select(zip,Count,visitdate) %>% as.data.frame()
+  medDrugGeo = subset_data %>% dplyr::select(zip,latitude,longitude) %>% as.data.frame()
 
   # reset options
   invisible(ss.options(reset = TRUE))
@@ -85,7 +85,7 @@ while(end_date <= max(medDrug_data$visitdate)) {
 
 #all clusters from for loop
 clusters = clusters_alldays %>%
-  select(zip = LOC_ID, lat = LATITUDE, long = LONGITUDE, radius = RADIUS, date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
+  dplyr::select(zip = LOC_ID, lat = LATITUDE, long = LONGITUDE, radius = RADIUS, date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
 
 
 write.csv(clusters, file.path(results_dir, "clusters.csv"), row.names = FALSE)
