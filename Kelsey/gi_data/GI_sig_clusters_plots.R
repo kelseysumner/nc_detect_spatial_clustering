@@ -41,7 +41,7 @@ for (study_length in c(7,30)) {
     ggplot(aes(x = date, y = size_value, text = date, color = size_type)) +
     geom_point() +
     theme_bw() +
-    scale_x_date(labels = scales::date_format("%b"), breaks = seq.Date(min(sig_clusters_plot$date), max(sig_clusters_plot$date), by = "1 month")) +
+    scale_x_date(labels = scales::date_format("%b"), breaks = seq.Date(ymd("2018-01-01"), ymd("2018-12-31"), by = "1 month")) +
     theme(axis.text.x = element_text(angle = 90)) +
     labs(x = "", y = "", title = paste0("Significant Daily Clusters - ", study_length, " Day Baseline")) +
     scale_color_manual(name = "",  labels = c("Number of\nLocations", "Radius (km)"), values = c("cornflowerblue", "navyblue"))

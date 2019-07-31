@@ -26,6 +26,8 @@ library(foreign)
 # set working directory
 setwd("C://Users//kelseyms//OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data")
 
+setwd("C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Naloxone Geocoded Data\\")
+
 # read in the cleaned geocoded naloxone data set
 mydata = read_csv("./clean_nalox_data.csv")
 
@@ -52,7 +54,7 @@ table(nchar(mydata$tract)) # these are a wide range of numbers, will not clean f
 
 # Get population data from tidy census 
 this_data = tidycensus::get_acs(geography = "tract", state = "NC",
-                                survey="acs5", year=2017, variables = c("B03002_001E", "B03002_003E", "B03002_004E"), 
+                                survey="acs5", year=2017, variables = c("B03002_001E", "B03002_003E", "B03002_004E"), geometry = TRUE,
                                 key="23ce49809ba6fbffdf7a68cc93010b5e171ba5e0", output = "wide")
 this_data = this_data %>%
   rename(totpop = B03002_001E, WnH = B03002_003E, BnH = B03002_004E) 
@@ -61,10 +63,11 @@ table(nchar(this_data$GEOID)) # all 11 characters which is good
 
 # get spatial data from tidy census
 nc_sf = tidycensus::get_acs(geography = "tract", state = "NC", 
-                            variables = "B19013_001",
+                            variables = "B19013_001", #B19013_001 is median household income, #B01001_001 is total of males and females
                             summary_var = "B01001_001", geometry = TRUE,  
                             key="23ce49809ba6fbffdf7a68cc93010b5e171ba5e0") %>%
-  rename(totpop = estimate)
+  #rename(totpop = estimate)
+  rename(totpop = summary_est)
 plot(nc_sf %>% st_geometry()) 
 
 # rename the zips variable to geoid in mydata data

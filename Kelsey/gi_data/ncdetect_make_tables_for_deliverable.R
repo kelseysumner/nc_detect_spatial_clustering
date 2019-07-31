@@ -13,24 +13,32 @@ library(tidyverse)
 library(foreign)
 library(lubridate)
 
+if (str_detect(tolower(Sys.info()["user"]), "kelsey")) {
+  wd = "C:\\Users\\kelseyms\\OneDrive - University of North Carolina at Chapel Hill\\nc_detect_one_drive"
+} else if (str_detect(tolower(Sys.info()["user"]), "joyce")) {
+  wd = "C:/Users/joyceyan/University of North Carolina at Chapel Hill/Sumner, Kelsey Marie - nc_detect_one_drive"
+}
+
+
+setwd(wd)
 
 
 #### ------ read in the data sets ------- ####
 
 
 # load in the med/drug data sets
-opioid_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/7_days/sig_clusters_subset.csv")
-opioid_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Opioid Overdose Data/SaTScan/rsatscan/30_days/sig_clusters_subset.csv")
+opioid_7day = read_csv("./Opioid Overdose Data/SaTScan/rsatscan/7_days/sig_clusters_subset.csv")
+opioid_30day = read_csv("./Opioid Overdose Data/SaTScan/rsatscan/30_days/sig_clusters_subset.csv")
 
 
 # load in the gi data sets
-gi_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/7_days/sig_clusters_subset.csv")
-gi_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/GI visit data/rsatscan/30_days/sig_clusters_subset.csv")
+gi_7day = read_csv("./GI visit data/rsatscan/7_days/sig_clusters_subset.csv")
+gi_30day = read_csv("./GI visit data/rsatscan/30_days/sig_clusters_subset.csv")
 
 
 # load in the naloxone data sets
-nalox_7day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/7_days/sig_clusters.csv")
-nalox_30day = read_csv("/Users/kelseysumner/OneDrive - University of North Carolina at Chapel Hill/nc_detect_one_drive/Naloxone Geocoded Data/satscan/30_days/sig_clusters.csv")
+nalox_7day = read_csv("./Naloxone Geocoded Data/satscan/7_days/sig_clusters.csv")
+nalox_30day = read_csv("./Naloxone Geocoded Data/satscan/30_days/sig_clusters.csv")
 
 
 #### -------- look at summaries of the different data sets -------- #### 
