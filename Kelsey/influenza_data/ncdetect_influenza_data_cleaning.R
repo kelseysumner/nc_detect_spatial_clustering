@@ -18,24 +18,38 @@ library(foreign)
 library(zipcode)
 library(readxl)
 library(sp)
+library(lubridate)
+
+#### -------- user setup ----------------- ####
+
+if (str_detect(tolower(Sys.info()["user"]), "kelsey")) {
+  wd = "C:\\Users\\kelseyms\\OneDrive - University of North Carolina at Chapel Hill\\nc_detect_one_drive\\Influenza Data"
+  
+} else if (str_detect(tolower(Sys.info()["user"]), "joyce")) {
+  wd = "C:\\Users\\joyceyan\\University of North Carolina at Chapel Hill\\Sumner, Kelsey Marie - nc_detect_one_drive\\Influenza Data"
+  
+} else {
+  print("Specify working directory")
+}
 
 
 #### -------- load in the data sets -------- ####
 
 # set working directory
-setwd("C:\\Users\\kelseyms\\OneDrive - University of North Carolina at Chapel Hill\\nc_detect_one_drive\\Influenza Data")
+setwd(wd)
 
 # read in the data sets
 # first the cc and triage notes
-data_ccandtriagenotes = read_csv("ILIbyZIP_ccandtriagenotes.csv") %>%
-  mutate(zip = str_pad(as.character(ZIP), width = 5, side = "left", pad = "0")) %>%
-  dplyr::select(-ZIP)
-colnames(data_ccandtriagenotes) = c("Count", "visitdate", "zip")
+data_ccandtriagenotes = read_csv("./ccandtriagenotes/ILIbyZIP_ccandtriagenotes.csv") %>%
+  filter(ZIP != "NULL") %>%
+  mutate(visitdate = mdy(visitdate), zip = str_pad(as.character(ZIP), width = 5, side = "left", pad = "0")) %>%
+  dplyr::select(visitdate, Count = syndromecount, zip)
+
 # then the cc only one
-data_cconly = read_csv("ILIbyZIP_cconly.csv") %>%
-  mutate(zip = str_pad(as.character(ZIP), width = 5, side = "left", pad = "0")) %>%
-  dplyr::select(-ZIP)
-colnames(data_cconly) = c("Count", "visitdate", "zip")
+data_cconly = read_csv("./cc_only/ILIbyZIP_cconly.csv") %>%
+  filter(ZIP != "NULL") %>%
+  mutate(visitdate = mdy(visitdate), zip = str_pad(as.character(ZIP), width = 5, side = "left", pad = "0")) %>%
+  dplyr::select(visitdate, Count = syndromecount, zip)
 
 
 # look at quick summaries of both data sets
@@ -53,10 +67,12 @@ table(data_cconly$zip)
 data("zipcode")
 clean_data_ccandtriagenotes = data_ccandtriagenotes %>%
   left_join(zipcode, by = "zip") %>%
-  filter_all(all_vars(!is.na(.)))
+  filter_all(all_vars(!is.na(.))) %>%
+  mutate(visitweek = epiyear(visitdate)*100 + epiweek(visitdate))
+
 #write to csv for import into SaTScan as case and coordinates files
 clean_data_ccandtriagenotes %>%
-  write.csv("clean_ILIbyZIP_ccandtriagenotes.csv")
+  write_csv("./ccandtriagenotes/clean_ILIbyZIP_ccandtriagenotes.csv")
 
 
 # cc only data set
@@ -64,9 +80,34 @@ clean_data_ccandtriagenotes %>%
 data("zipcode")
 clean_data_cconly = data_cconly %>%
   left_join(zipcode, by = "zip") %>%
-  filter_all(all_vars(!is.na(.)))
+  filter_all(all_vars(!is.na(.))) %>%
+  mutate(visitweek = epiyear(visitdate)*100 + epiweek(visitdate))
+
+
 #write to csv for import into SaTScan as case and coordinates files
 clean_data_cconly %>%
-  write.csv("clean_ILIbyZIP_cconly.csv")
+  write_csv("./cc_only/clean_ILIbyZIP_cconly.csv")
 
+
+
+#############################################################
+#### ----- aggregate weekly counts (Sun-Sat)------ ####
+# wk_data_ccandtriagenotes= data_ccandtriagenotes %>%
+#   mutate(visitdate = mdy(visitdate)) %>%
+#   mutate(visitweek = epiweek(visitdate)) %>%
+#   group_by(zip, visitweek) %>%
+#   summarize(Count = sum(Count)) %>%
+#   left_join(zipcode, by = "zip") %>%
+#   filter_all(all_vars(!is.na(.)))
+# 
+# write_csv(wk_data_ccandtriagenotes, "./ccandtriagenotes/clean_weekly_ILIbyZIP_ccandtriagenotes.csv")
+# 
+# wk_data_cconly = data_cconly %>%
+#   mutate(visitweek = epiweek(mdy(visitdate))) %>%
+#   group_by(zip, visitweek) %>%
+#   summarize(Count = sum(Count)) %>%
+#   left_join(zipcode, by = "zip") %>%
+#   filter_all(all_vars(!is.na(.)))
+# 
+# write_csv(wk_data_cconly, "./cc_only/clean_weekly_ILIbyZIP_cconly.csv")
 
