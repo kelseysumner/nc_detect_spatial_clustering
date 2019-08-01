@@ -51,11 +51,13 @@ str(flu_data$visitweek)
 #### --------- run satscan for cconly ---------- ####
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
-study_length = 30
+#study_length = 30
+study_length = 180
 
 #larger folder containing folders for each day
 results_dir =  file.path(getwd(), paste0(study_length, "_days_WEEKLY")) 
 dir.create(results_dir)
+dir.create(file.path(results_dir, "weekly_shapefiles"))
 
 # set up the first week to end the study period on
 end_date0 = min(flu_data$visitdate) + study_length
@@ -65,8 +67,13 @@ end_week = epiyear(end_date0)*100 + epiweek(end_date0)
 weeks = flu_data$visitweek %>%  unique()
 w = match(end_week, weeks)
 
-# create empty data frame to store all cluster information from all days
-clusters_alldays = data.frame()
+# create empty data frame to store all cluster information from all weeks
+clusters_allweeks = data.frame()
+
+# create empty SpatialPolygonsDataFrame to store all significant cluster shapeclust information
+# sp_sig_clusters_allweeks = sp::SpatialPolygons(list()) %>%
+#   sp::SpatialPolygonsDataFrame(data.frame())
+
 
 # run the loop until the last week in our data
 while (w <= length(weeks)){
@@ -117,9 +124,26 @@ while (w <= length(weeks)){
   summary(flu)
   summary.default(flu)
   flu$col
-  #sp::plot(flu$shapeclust)
   
-  clusters_alldays = rbind(clusters_alldays, flu$col)
+  
+  if (sum(flu$shapeclust$P_VALUE < 0.05) > 0) {
+    
+    # extract shapeclust info for significant clusters, if any
+    sp_sig_clusters = flu$shapeclust[which(flu$shapeclust$P_VALUE < 0.05),] 
+    
+    # delete previously created weekly shapefile folders
+    dsn_path = file.path(results_dir, "weekly_shapefiles", end_date)
+    if (dir.exists(dsn_path)){
+      unlink(dsn_path, recursive = T)
+    }
+    
+    # write out shapefile for the significant clusters of the week
+    rgdal::writeOGR(sp_sig_clusters, dsn = dsn_path, layer = "sp_sig_clusters", drive = "ESRI Shapefile")
+  
+  }
+  
+  #sp_sig_clusters_allweeks = rbind(sp_sig_clusters_allweeks, sp_sig_clusters)
+  clusters_allweeks = rbind(clusters_allweeks, flu$col)
   
   # #copy files from temporary directory to new directory
   # newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
@@ -137,9 +161,9 @@ while (w <= length(weeks)){
 }
 
 #all clusters from for loop
-clusters = clusters_alldays %>%
+clusters = clusters_allweeks %>%
   dplyr::select(zip = LOC_ID, lat = LATITUDE, long = LONGITUDE, radius = RADIUS, start_date = START_DATE, 
-                end_date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
+                end_date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE, observed = OBSERVED, expected = EXPECTED, ode = ODE)
 
 
 write.csv(clusters, file.path(results_dir, "clusters.csv"), row.names = FALSE)
@@ -149,6 +173,11 @@ sig_clusters = clusters %>%
   filter(p_value < 0.05)
 
 write.csv(sig_clusters, file.path(results_dir, "sig_clusters.csv"), row.names = FALSE)
+
+
+# significant clusters shape info from all weeks
+#rgdal::writeOGR(sp_sig_clusters_allweeks, dsn = file.path(results_dir, end_date), layer = "sp_sig_clusters_allweeks", drive = "ESRI Shapefile")
+
 
 
 ####################################################################################################
@@ -168,11 +197,14 @@ str(flu_data$visitdate)
 #### --------- run satscan for cc and triage notes ---------- ####
 
 # set length of study period for daily SaTScan analyses (number of days to use as baseline)
-study_length = 30
+#study_length = 30
+study_length = 180
 
 #larger folder containing folders for each day
 results_dir =  file.path(getwd(), paste0(study_length, "_days_WEEKLY")) 
 dir.create(results_dir)
+dir.create(file.path(results_dir, "weekly_shapefiles"))
+
 
 # set up the first week to end the study period on
 end_date0 = min(flu_data$visitdate) + study_length
@@ -182,8 +214,12 @@ end_week = epiyear(end_date0)*100 + epiweek(end_date0)
 weeks = flu_data$visitweek %>%  unique()
 w = match(end_week, weeks)
 
-# create empty data frame to store all cluster information from all days
-clusters_alldays = data.frame()
+# create empty data frame to store all cluster information from all weeks
+clusters_allweeks = data.frame()
+
+# create empty SpatialPolygonsDataFrame to store all significant cluster shapeclust information
+sp_sig_clusters_allweeks = sp::SpatialPolygons(list()) %>%
+  sp::SpatialPolygonsDataFrame(data.frame())
 
 # run the loop until the last week in our data
 while (w <= length(weeks)){
@@ -235,9 +271,25 @@ while (w <= length(weeks)){
   summary(flu)
   summary.default(flu)
   flu$col
-  #sp::plot(flu$shapeclust)
   
-  clusters_alldays = rbind(clusters_alldays, flu$col)
+  if (sum(flu$shapeclust$P_VALUE < 0.05) > 0) {
+    
+    # extract shapeclust info for significant clusters, if any
+    sp_sig_clusters = flu$shapeclust[which(flu$shapeclust$P_VALUE < 0.05),] 
+    
+    # delete previously created weekly shapefile folders
+    dsn_path = file.path(results_dir, "weekly_shapefiles", end_date)
+    if (dir.exists(dsn_path)){
+      unlink(dsn_path, recursive = T)
+    }
+    
+    # write out shapefile for the significant clusters of the week
+    rgdal::writeOGR(sp_sig_clusters, dsn = dsn_path, layer = "sp_sig_clusters", drive = "ESRI Shapefile")
+    
+  }
+  
+  #sp_sig_clusters_allweeks = rbind(sp_sig_clusters_allweeks, sp_sig_clusters)
+  clusters_allweeks = rbind(clusters_allweeks, flu$col)
   
   # #copy files from temporary directory to new directory
   # newdir = file.path(results_dir, as.character(end_date))  #make new folder for each individual day (within larger results_dir folder)
@@ -255,9 +307,9 @@ while (w <= length(weeks)){
 }
 
 #all clusters from for loop
-clusters = clusters_alldays %>%
+clusters = clusters_allweeks %>%
   dplyr::select(zip = LOC_ID, lat = LATITUDE, long = LONGITUDE, radius = RADIUS, start_date = START_DATE, 
-                end_date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE)
+                end_date = END_DATE, number_loc = NUMBER_LOC, p_value = P_VALUE, observed = OBSERVED, expected = EXPECTED, ode = ODE)
 
 
 write.csv(clusters, file.path(results_dir, "clusters.csv"), row.names = FALSE)
@@ -268,7 +320,11 @@ sig_clusters = clusters %>%
 
 write.csv(sig_clusters, file.path(results_dir, "sig_clusters.csv"), row.names = FALSE)
 
+# significant clusters shape info from all weeks
+#rgdal::writeOGR(sp_sig_clusters_allweeks, dsn = file.path(results_dir, end_date), layer = "sp_sig_clusters_allweeks", drive = "ESRI Shapefile")
 
+
+########### --------- misc ---------------------- ####
 # check weeks are Sunday to Saturday
 clusters %>% 
   mutate(start_weekday = weekdays(ymd(start_date)), end_weekday = weekdays(ymd(end_date))) %>% 
