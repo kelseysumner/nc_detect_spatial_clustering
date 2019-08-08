@@ -6,7 +6,7 @@
 # ----------------------------------------- #
 
 # what this is doing: 
-# reading in the naloxone geocoded data set, merging with census data at the tract level
+# reading in the zip code level influenza data, merging with census data at the tract level
 
 #### ------- load the libraries ---------- ####
 
